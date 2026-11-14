@@ -15,9 +15,7 @@ samples = {
 }
 
 for name, text in samples.items():
-    ids = enc.encode(name)
-    text_enc = enc.encode(text)
-    print('text ---->', text_enc)
+    ids = enc.encode(text)
     ratio = len(text) / len(ids)
     print(f"\n== {name}: {len(text)} chars -> {len(ids)} tokens ({ratio:.1f} chars/token)")
     print([enc.decode([i]) for i in ids])
