@@ -7,5 +7,9 @@ class Settings(BaseSettings):
     llm_api_key: str = "ollama"
     llm_model: str = "llama3.2:3b"
 
+    # USD per 1 million tokens. Local models are free; set real prices for a hosted provider.
+    llm_input_price_per_mtok: float = 0.0
+    llm_output_price_per_mtok: float = 0.0
+
 
 settings = Settings()
