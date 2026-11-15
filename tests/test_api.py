@@ -46,7 +46,9 @@ def test_explain_ok(client_with):
 
 
 def test_explain_bad_model_output_is_502(client_with):
-    assert client_with(FakeLLM(json_error=True)).post("/explain", json={"log": "x"}).status_code == 502
+    assert (
+        client_with(FakeLLM(json_error=True)).post("/explain", json={"log": "x"}).status_code == 502
+    )
 
 
 def test_explain_empty_log_is_422(client_with):

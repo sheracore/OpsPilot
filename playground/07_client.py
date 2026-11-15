@@ -8,7 +8,10 @@ logging.getLogger("httpx2").setLevel(logging.WARNING)
 llm = LLMClient()
 messages = [
     {"role": "system", "content": "You are an SRE assistant. Be brief."},
-    {"role": "user", "content": "What are the 3 most common causes of a Postgres 'too many connections' error?"},
+    {
+        "role": "user",
+        "content": "What are the 3 most common causes of a Postgres 'too many connections' error?",
+    },
 ]
 
 print("--- complete() ---")

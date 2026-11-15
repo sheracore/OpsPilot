@@ -5,6 +5,7 @@ from opspilot.schemas import LogExplanation
 
 GOOD = '{"summary": "DB down", "severity": "high", "component": "payment-worker"}'
 
+
 class FakeLLM(LLMClient):
     """Replays canned (text, finish_reason) replies; no network, no Ollama."""
 
@@ -16,6 +17,7 @@ class FakeLLM(LLMClient):
         self.calls.append(list(messages))
         text, finish = next(self._replies)
         return LLMResult(text, "fake", 10, 5, 1.0, finish, 0.0)
+
 
 MSGS = [{"role": "user", "content": "x"}]
 
@@ -39,7 +41,9 @@ def test_retry_feeds_back_the_error():
 
 
 def test_truncated_output_is_retried():
-    r = FakeLLM([('{"summary": "cut', "length"), (GOOD, "stop")]).complete_json(MSGS, LogExplanation)
+    r = FakeLLM([('{"summary": "cut', "length"), (GOOD, "stop")]).complete_json(
+        MSGS, LogExplanation
+    )
     assert r.attempts == 2
 
 

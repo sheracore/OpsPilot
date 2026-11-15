@@ -5,7 +5,10 @@ from opspilot.config import settings
 client = OpenAI(base_url=settings.llm_base_url, api_key=settings.llm_api_key)
 
 prompt = [
-    {"role": "user", "content": "Invent a name for an AI incident-response bot. Reply with the name only."}
+    {
+        "role": "user",
+        "content": "Invent a name for an AI incident-response bot. Reply with the name only.",
+    }
 ]
 
 for temperature in (0.0, 0.8, 1.5):

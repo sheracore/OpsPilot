@@ -1,8 +1,9 @@
 import logging
 
+from queueless_samples import SAMPLES
+
 from opspilot.explain import explain_log
 from opspilot.llm import LLMClient, StructuredOutputError
-from queueless_samples import SAMPLES
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
 logging.getLogger("httpx2").setLevel(logging.WARNING)
@@ -23,6 +24,8 @@ for log, want_comp, want_sev in SAMPLES:
     print(f"  component: {d.component.value:<22} expected {want_comp}")
     print(f"  severity:  {d.severity.value:<22} expected {want_sev}")
     print(f"  summary:   {d.summary}")
-    print(f"  attempts={r.attempts} prompt_tokens={r.prompt_tokens} completion_tokens={r.completion_tokens}")
+    print(
+        f"  attempts={r.attempts} prompt_tokens={r.prompt_tokens} completion_tokens={r.completion_tokens}"
+    )
 
 print(f"\ncomponent {comp_ok}/{len(SAMPLES)}, severity {sev_ok}/{len(SAMPLES)}")

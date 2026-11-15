@@ -26,5 +26,18 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "pre-commit>=4.7.0",
     "pytest>=9.2.0",
+    "ruff>=0.17.5",
 ]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]   # pycodestyle, pyflakes, import order, bugbear, pyupgrade
+ignore = ["E501"]                     # line length is left to the formatter
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

@@ -14,7 +14,10 @@ stream = client.chat.completions.create(
     model=settings.llm_model,
     messages=[
         {"role": "system", "content": "You are an SRE assistant."},
-        {"role": "user", "content": "In 5 short bullet points: how do I debug a pod stuck in CrashLoopBackOff?"},
+        {
+            "role": "user",
+            "content": "In 5 short bullet points: how do I debug a pod stuck in CrashLoopBackOff?",
+        },
     ],
     temperature=0,
     stream=True,

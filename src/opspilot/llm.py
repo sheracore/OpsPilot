@@ -3,7 +3,7 @@ import time
 from collections.abc import Iterator
 from dataclasses import dataclass
 
-from openai import OpenAI, BaseModel
+from openai import BaseModel, OpenAI
 from pydantic import ValidationError
 
 from opspilot.config import settings
@@ -28,7 +28,7 @@ class LLMResult:
 class StructuredResult[T]:
     data: T
     attempts: int
-    prompt_tokens: int       # summed over all attempts
+    prompt_tokens: int  # summed over all attempts
     completion_tokens: int
     cost_usd: float
 
@@ -145,7 +145,10 @@ class LLMClient:
                 self.model,
                 ((first_at or end) - start) * 1000,
                 (end - start) * 1000,
-                pt, ct, finish_reason, self._cost(pt, ct),
+                pt,
+                ct,
+                finish_reason,
+                self._cost(pt, ct),
             )
 
     def complete_json[T: BaseModel](
@@ -182,10 +185,15 @@ class LLMClient:
                 else:
                     return StructuredResult(data, attempt, prompt_tokens, completion_tokens, cost)
 
-            logger.warning("llm_json_retry attempt=%d/%d problem=%s", attempt, max_attempts, problem)
+            logger.warning(
+                "llm_json_retry attempt=%d/%d problem=%s", attempt, max_attempts, problem
+            )
             history = history + [
                 {"role": "assistant", "content": result.text},
-                {"role": "user", "content": f"That was not valid: {problem}\nReply again with ONLY the corrected JSON object."},
+                {
+                    "role": "user",
+                    "content": f"That was not valid: {problem}\nReply again with ONLY the corrected JSON object.",
+                },
             ]
 
         raise StructuredOutputError(max_attempts, last_text, problem)
@@ -202,8 +210,12 @@ class LLMClient:
         logger.info(
             "llm_call model=%s prompt_tokens=%d completion_tokens=%d "
             "latency_ms=%.0f finish_reason=%s cost_usd=%.6f",
-            r.model, r.prompt_tokens, r.completion_tokens,
-            r.latency_ms, r.finish_reason, r.cost_usd,
+            r.model,
+            r.prompt_tokens,
+            r.completion_tokens,
+            r.latency_ms,
+            r.finish_reason,
+            r.cost_usd,
         )
         if r.finish_reason == "length":
             logger.warning("llm_truncated model=%s: output hit max_tokens and is cut off", r.model)

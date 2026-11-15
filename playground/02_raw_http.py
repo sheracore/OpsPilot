@@ -7,12 +7,8 @@ from opspilot.config import settings
 payload = {
     "model": settings.llm_model,
     "messages": [
-        {
-            "role": "system", "content": "You are an SRE assistant. Answer in one sentence."
-        },
-        {
-            "role": "user", "content": "What does HTTP 503 usually mean?"
-        },
+        {"role": "system", "content": "You are an SRE assistant. Answer in one sentence."},
+        {"role": "user", "content": "What does HTTP 503 usually mean?"},
     ],
     "temperature": 0,
 }

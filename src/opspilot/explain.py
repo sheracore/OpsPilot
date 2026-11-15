@@ -8,8 +8,8 @@ Lines usually start with the docker compose service name, e.g. "payment-worker  
 Reply with ONLY a JSON object with exactly these keys:
 {{
 "summary": "<one sentence: what happened and why it matters>", 
-"severity": "<{'|'.join(s.value for s in Severity)}>", 
-"component": "<{'|'.join(c.value for c in Component)}>"
+"severity": "<{"|".join(s.value for s in Severity)}>", 
+"component": "<{"|".join(c.value for c in Component)}>"
 }}
 
 Severity (judge by IMPACT, not by the log level. A WARNING can be high):

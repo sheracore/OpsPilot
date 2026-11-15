@@ -19,13 +19,19 @@ system = {"role": "system", "content": "You are an SRE assistant. Be brief."}
 # Call 1: give the model some facts
 first = [
     system,
-    {"role": "user", "content": "Incident: order-svc fails with ERR_CONN_REFUSED to postgres:5432."},
+    {
+        "role": "user",
+        "content": "Incident: order-svc fails with ERR_CONN_REFUSED to postgres:5432.",
+    },
 ]
 reply1 = chat(first)
 print("1) reply:", reply1)
 
 # Call 2: a brand-new request WITHOUT the history
-print("\n2) without history:", chat([system, {"role": "user", "content": "Which service is failing?"}]))
+print(
+    "\n2) without history:",
+    chat([system, {"role": "user", "content": "Which service is failing?"}]),
+)
 
 # Call 3: the same question WITH the history
 history = first + [
