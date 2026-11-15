@@ -110,16 +110,43 @@ class LLMClient:
         temperature: float = 0.0,
         max_tokens: int = 512,
     ) -> Iterator[str]:
-        stream = self._client.chat.completions.create(
-            model=self.model,
-            messages=messages,
-            temperature=temperature,
-            max_tokens=max_tokens,
-            stream=True,
-        )
-        for chunk in stream:
-            if chunk.choices and chunk.choices[0].delta.content:
-                yield chunk.choices[0].delta.content
+        start = time.perf_counter()
+        first_at: float | None = None
+        usage = None
+        finish_reason: str | None = None
+        try:
+            stream = self._client.chat.completions.create(
+                model=self.model,
+                messages=messages,
+                temperature=temperature,
+                max_tokens=max_tokens,
+                stream=True,
+                stream_options={"include_usage": True},
+            )
+            for chunk in stream:
+                if chunk.usage:
+                    usage = chunk.usage
+                if not chunk.choices:
+                    continue
+                choice = chunk.choices[0]
+                if choice.finish_reason:
+                    finish_reason = choice.finish_reason
+                if choice.delta.content:
+                    if first_at is None:
+                        first_at = time.perf_counter()
+                    yield choice.delta.content
+        finally:
+            end = time.perf_counter()
+            pt = usage.prompt_tokens if usage else 0
+            ct = usage.completion_tokens if usage else 0
+            logger.info(
+                "llm_stream model=%s ttft_ms=%.0f total_ms=%.0f prompt_tokens=%d "
+                "completion_tokens=%d finish_reason=%s cost_usd=%.6f",
+                self.model,
+                ((first_at or end) - start) * 1000,
+                (end - start) * 1000,
+                pt, ct, finish_reason, self._cost(pt, ct),
+            )
 
     def complete_json[T: BaseModel](
         self,

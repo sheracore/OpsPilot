@@ -3,7 +3,7 @@ import logging
 from opspilot.llm import LLMClient
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
-logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpx2").setLevel(logging.WARNING)
 
 llm = LLMClient()
 messages = [

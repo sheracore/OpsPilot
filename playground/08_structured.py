@@ -5,7 +5,7 @@ from opspilot.llm import LLMClient, StructuredOutputError
 from queueless_samples import SAMPLES
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
-logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpx2").setLevel(logging.WARNING)
 
 llm = LLMClient()
 comp_ok = sev_ok = 0
