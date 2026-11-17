@@ -12,5 +12,11 @@ class Settings(BaseSettings):
     llm_input_price_per_mtok: float = 0.0
     llm_output_price_per_mtok: float = 0.0
 
+    embed_model: str = "nomic-embed-text"
+    # Some embedding models want a task prefix. nomic does (per its model card);
+    # models like bge-m3 don't. Keeping them in config makes a model swap config-only.
+    embed_query_prefix: str = "search_query: "
+    embed_doc_prefix: str = "search_document: "
+
 
 settings = Settings()
