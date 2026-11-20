@@ -1,4 +1,22 @@
 services:
+  db:
+    image: pgvector/pgvector:pg17
+    environment:
+      POSTGRES_USER: opspilot
+      POSTGRES_PASSWORD: opspilot
+      POSTGRES_DB: opspilot
+    ports:
+      - "5436:5432"
+    volumes:
+      - opspilot-db:/var/lib/postgresql/data
+      - ./db/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    shm_size: 256mb
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U opspilot -d opspilot"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
   opspilot:
     build: .
     image: opspilot:dev
@@ -8,6 +26,10 @@ services:
       OPSPILOT_LLM_BASE_URL: http://host.docker.internal:11434/v1
       OPSPILOT_LLM_API_KEY: ollama
       OPSPILOT_LLM_MODEL: ${OPSPILOT_LLM_MODEL:-llama3.2:3b}
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    restart: unless-stopped
+      OPSPILOT_DATABASE_URL: postgresql://opspilot:opspilot@db:5432/opspilot
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  opspilot-db:

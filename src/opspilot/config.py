@@ -17,6 +17,7 @@ class Settings(BaseSettings):
     # models like bge-m3 don't. Keeping them in config makes a model swap config-only.
     embed_query_prefix: str = "search_query: "
     embed_doc_prefix: str = "search_document: "
+    database_url: str = "postgresql://opspilot:opspilot@localhost:5436/opspilot"
 
 
 settings = Settings()
